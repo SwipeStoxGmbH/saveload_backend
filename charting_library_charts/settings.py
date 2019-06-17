@@ -1,4 +1,5 @@
 # Django settings for charting_library_charts project.
+import os
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -14,11 +15,11 @@ MANAGERS = ADMINS
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': 'charting_library',
-		'USER': 'postgres',
-		'PASSWORD': 'postgres', ### Put your Postgres password here
-		'HOST': 'localhost',
-		'PORT': '5432',
+		'NAME': os.environ['DATABASE_NAME'], #'charting_library',
+		'USER': os.environ['DATABASE_USER'],
+		'PASSWORD': os.environ['DATABASE_PASSWORD'], ### Put your Postgres password here
+		'HOST': os.environ['DATABASE_HOST'],
+		'PORT': os.environ['DATABASE_PORT'],
 	}
 }
 
