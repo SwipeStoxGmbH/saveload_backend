@@ -1,0 +1,16 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: trading-saveload
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /1.0/charts
+spec:
+  selector:
+    app: trading-saveload
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http-trading-saveload
+  type: NodePort

@@ -1,0 +1,38 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: trading-saveload
+spec:
+  revisionHistoryLimit: 2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: trading-saveload
+        group: trading
+    spec:
+      affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: trading-saveload
+                topologyKey: kubernetes.io/hostname
+      containers:
+      # API container
+        - name: trading-saveload
+          image: 583158373671.dkr.ecr.eu-west-1.amazonaws.com/naga/trading/saveload:master-2
+          command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"]
+          imagePullPolicy: Always
+          ports:
+          - name: service-port
+            containerPort: 8080
+          envFrom:
+          - configMapRef:
+              name: trading-saveload
+          - secretRef:
+              name: trading-saveload
+          terminationMessagePath: /dev/termination-log
+      restartPolicy: Always
